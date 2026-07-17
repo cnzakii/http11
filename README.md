@@ -71,27 +71,46 @@ connection = h11r.Connection(h11r.Role.SERVER)
 
 # Bytes received from any synchronous or asynchronous transport.
 connection.receive_data(
-    b"GET / HTTP/1.1\r\n"
+    b"POST /echo HTTP/1.1\r\n"
     b"Host: example.com\r\n"
+    b"Content-Length: 4\r\n"
     b"\r\n"
+    b"ping"
 )
 
-request = connection.next_event()
-end = connection.next_event()
+request = None
+body = bytearray()
 
-assert isinstance(request, h11r.Request)
-assert request.method == b"GET"
-assert isinstance(end, h11r.EndOfMessage)
+# Drain every event already available from the received bytes.
+while True:
+    event = connection.next_event()
+    if isinstance(event, h11r.Request):
+        request = event
+    elif isinstance(event, h11r.Data):
+        body.extend(event.data)
+    elif isinstance(event, h11r.EndOfMessage):
+        if request is None:
+            raise RuntimeError("request ended before its Request event")
+        break
+    elif event is h11r.ReceiveStatus.NEED_DATA:
+        raise RuntimeError("the request is incomplete")
+    else:
+        raise RuntimeError(f"unexpected request event: {event!r}")
 
-# Write the returned bytes to the same transport.
+# Echo the request body and write every returned byte to the same transport.
+response_body = bytes(body)
 outbound = connection.send_response(
     200,
-    [("Content-Length", "2")],
+    [("Content-Length", str(len(response_body)))],
     reason="OK",
 )
-outbound += connection.send_data(b"OK")
+outbound += connection.send_data(response_body)
 outbound += connection.end_of_message()
 ```
+
+See the [runnable Python examples][python-examples] for complete round-trip,
+streaming body, pipelining, zero-copy body, WebSocket Upgrade, and asyncio
+server lessons.
 
 ## A Protocol Component, Not an HTTP Client
 
@@ -131,4 +150,5 @@ MIT
 [benchmark-results]: https://github.com/cnzakii/h11r/blob/main/docs/assets/python-benchmark.json
 [benchmark-script]: https://github.com/cnzakii/h11r/blob/main/crates/h11r-python/benchmarks/compare_h11.py
 [contributing-guide]: https://github.com/cnzakii/h11r/blob/main/CONTRIBUTING.md
+[python-examples]: https://github.com/cnzakii/h11r/tree/main/examples
 [sans-io]: https://sans-io.readthedocs.io/
