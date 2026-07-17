@@ -99,7 +99,7 @@ jobs:
       - name: Generate Rust and Python coverage reports
         run: make coverage
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           disable_search: true
           # Coverage generation fails in the preceding step. Only an external
