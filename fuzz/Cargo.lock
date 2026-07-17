@@ -44,17 +44,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "http11"
+name = "h11r"
 version = "0.1.0"
 dependencies = [
  "httparse",
 ]
 
 [[package]]
-name = "http11-fuzz"
+name = "h11r-fuzz"
 version = "0.0.0"
 dependencies = [
- "http11",
+ "h11r",
  "libfuzzer-sys",
 ]
 

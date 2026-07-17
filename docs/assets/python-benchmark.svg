@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="548" viewBox="0 0 960 548" role="img" aria-labelledby="title desc">
-<title id="title">http11 and h11 Python benchmark</title>
+<title id="title">h11r and h11 Python benchmark</title>
 <desc id="desc">Relative throughput for five HTTP/1.1 scenarios. Higher is faster; h11 is the 1.00 baseline.</desc>
 <style>
 text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
@@ -21,40 +21,40 @@ text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
 <line class="grid" x1="890.0" y1="108" x2="890.0" y2="492"/>
 <text class="secondary" x="890.0" y="102" text-anchor="middle" font-size="10">20×</text>
 <text class="primary" x="40" y="139" font-size="13" font-weight="500">Small GET</text>
-<text class="secondary" x="40" y="161" font-size="11">0.71 µs vs 12.04 µs</text>
-<text class="secondary" x="278" y="136" text-anchor="end" font-size="10">http11</text>
-<rect class="candidate" x="330" y="124" width="474.2" height="15" rx="7.5"/>
-<text class="primary" x="814.2" y="136" font-size="11" font-weight="500">16.9×</text>
+<text class="secondary" x="40" y="161" font-size="11">0.79 µs vs 12.44 µs</text>
+<text class="secondary" x="278" y="136" text-anchor="end" font-size="10">h11r</text>
+<rect class="candidate" x="330" y="124" width="443.2" height="15" rx="7.5"/>
+<text class="primary" x="783.2" y="136" font-size="11" font-weight="500">15.8×</text>
 <text class="secondary" x="278" y="159" text-anchor="end" font-size="10">h11</text>
 <rect class="reference" x="330" y="147" width="28.0" height="10" rx="5"/>
 <text class="primary" x="40" y="215" font-size="13" font-weight="500">Fixed body · 1 KiB</text>
-<text class="secondary" x="40" y="237" font-size="11">1.09 µs vs 14.99 µs</text>
-<text class="secondary" x="278" y="212" text-anchor="end" font-size="10">http11</text>
-<rect class="candidate" x="330" y="200" width="386.5" height="15" rx="7.5"/>
-<text class="primary" x="726.5" y="212" font-size="11" font-weight="500">13.8×</text>
+<text class="secondary" x="40" y="237" font-size="11">1.12 µs vs 15.58 µs</text>
+<text class="secondary" x="278" y="212" text-anchor="end" font-size="10">h11r</text>
+<rect class="candidate" x="330" y="200" width="388.7" height="15" rx="7.5"/>
+<text class="primary" x="728.7" y="212" font-size="11" font-weight="500">13.9×</text>
 <text class="secondary" x="278" y="235" text-anchor="end" font-size="10">h11</text>
 <rect class="reference" x="330" y="223" width="28.0" height="10" rx="5"/>
 <text class="primary" x="40" y="291" font-size="13" font-weight="500">Fragmented GET · 16 B</text>
-<text class="secondary" x="40" y="313" font-size="11">1.01 µs vs 13.44 µs</text>
-<text class="secondary" x="278" y="288" text-anchor="end" font-size="10">http11</text>
-<rect class="candidate" x="330" y="276" width="373.1" height="15" rx="7.5"/>
-<text class="primary" x="713.1" y="288" font-size="11" font-weight="500">13.3×</text>
+<text class="secondary" x="40" y="313" font-size="11">1.03 µs vs 13.83 µs</text>
+<text class="secondary" x="278" y="288" text-anchor="end" font-size="10">h11r</text>
+<rect class="candidate" x="330" y="276" width="374.9" height="15" rx="7.5"/>
+<text class="primary" x="714.9" y="288" font-size="11" font-weight="500">13.4×</text>
 <text class="secondary" x="278" y="311" text-anchor="end" font-size="10">h11</text>
 <rect class="reference" x="330" y="299" width="28.0" height="10" rx="5"/>
 <text class="primary" x="40" y="367" font-size="13" font-weight="500">Chunked stream · 64 KiB</text>
-<text class="secondary" x="40" y="389" font-size="11">7.71 µs vs 66.23 µs</text>
-<text class="secondary" x="278" y="364" text-anchor="end" font-size="10">http11</text>
-<rect class="candidate" x="330" y="352" width="240.4" height="15" rx="7.5"/>
-<text class="primary" x="580.4" y="364" font-size="11" font-weight="500">8.6×</text>
+<text class="secondary" x="40" y="389" font-size="11">8.23 µs vs 68.94 µs</text>
+<text class="secondary" x="278" y="364" text-anchor="end" font-size="10">h11r</text>
+<rect class="candidate" x="330" y="352" width="234.4" height="15" rx="7.5"/>
+<text class="primary" x="574.4" y="364" font-size="11" font-weight="500">8.4×</text>
 <text class="secondary" x="278" y="387" text-anchor="end" font-size="10">h11</text>
 <rect class="reference" x="330" y="375" width="28.0" height="10" rx="5"/>
 <text class="primary" x="40" y="443" font-size="13" font-weight="500">Client/server round trip</text>
-<text class="secondary" x="40" y="465" font-size="11">1.56 µs vs 27.90 µs</text>
-<text class="secondary" x="278" y="440" text-anchor="end" font-size="10">http11</text>
-<rect class="candidate" x="330" y="428" width="502.2" height="15" rx="7.5"/>
-<text class="primary" x="842.2" y="440" font-size="11" font-weight="500">17.9×</text>
+<text class="secondary" x="40" y="465" font-size="11">1.67 µs vs 29.26 µs</text>
+<text class="secondary" x="278" y="440" text-anchor="end" font-size="10">h11r</text>
+<rect class="candidate" x="330" y="428" width="492.1" height="15" rx="7.5"/>
+<text class="primary" x="832.1" y="440" font-size="11" font-weight="500">17.6×</text>
 <text class="secondary" x="278" y="463" text-anchor="end" font-size="10">h11</text>
 <rect class="reference" x="330" y="451" width="28.0" height="10" rx="5"/>
-<text class="secondary" x="40" y="518" font-size="10">http11 0.1.0 · h11 0.16.0 · CPython 3.12.13 (64-bit)</text>
-<text class="secondary" x="40" y="535" font-size="10">Apple M4 · macOS-26.5.2-arm64-arm-64bit · 2026-07-16</text>
+<text class="secondary" x="40" y="518" font-size="10">h11r 0.1.0 · h11 0.16.0 · CPython 3.12.13 (64-bit)</text>
+<text class="secondary" x="40" y="535" font-size="10">Apple M4 · macOS-26.5.2-arm64-arm-64bit · 2026-07-17</text>
 </svg>

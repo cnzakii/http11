@@ -1,4 +1,0 @@
-interface:
-  display_name: "http11 Implementation"
-  short_description: "Implement focused http11 changes safely"
-  default_prompt: "Use $http11-implementation to implement this http11 change and verify it."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "http11 Knowledge"
-  short_description: "Verify HTTP/1.1 engineering facts from sources"
-  default_prompt: "Use $http11-knowledge to verify this HTTP/1.1 engineering claim from primary sources."

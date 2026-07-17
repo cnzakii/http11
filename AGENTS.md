@@ -1,8 +1,8 @@
-# http11 Repository Guidance
+# h11r Repository Guidance
 
 ## Product Boundary
 
-- `http11` is a Sans-I/O HTTP/1.1 protocol engine with a Rust core and a
+- `h11r` is a Sans-I/O HTTP/1.1 protocol engine with a Rust core and a
   Python package.
 - HTTP/1.1 is the whole product, not one module in a larger protocol suite. Do
   not add other protocol implementations or an umbrella-project hierarchy.
@@ -13,8 +13,8 @@
 
 ## Repository Map
 
-- `crates/http11`: transport-independent Rust protocol core.
-- `crates/http11-python`: PyO3 extension, Python package, stubs, tests, and
+- `crates/h11r`: transport-independent Rust protocol core.
+- `crates/h11r-python`: PyO3 extension, Python package, stubs, tests, and
   Python benchmarks.
 - `fuzz`: Rust fuzz targets for protocol input and state exploration.
 - `docs/knowledge`: source-based engineering facts, not project decisions or
@@ -61,10 +61,10 @@ make check
 
 ## Project Skills
 
-- Use `http11-implementation` for changes to code, tests, packaging, CI, or
+- Use `h11r-implementation` for changes to code, tests, packaging, CI, or
   project documentation.
-- Use `http11-audit` for read-only review after implementation or on request.
-- Use `http11-knowledge` for source-based factual research and explicitly
+- Use `h11r-audit` for read-only review after implementation or on request.
+- Use `h11r-knowledge` for source-based factual research and explicitly
   requested maintenance of `docs/knowledge`.
 
 Work is complete only after the relevant focused checks and required aggregate

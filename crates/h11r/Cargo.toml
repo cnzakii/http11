@@ -1,0 +1,22 @@
+[package]
+name = "h11r"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Sans-I/O HTTP/1.1 protocol engine"
+readme = "../../README.md"
+publish = true
+repository = "https://github.com/cnzakii/h11r"
+keywords = ["http", "http1", "h11r", "sans-io", "protocol"]
+categories = ["network-programming"]
+
+[dependencies]
+httparse = "1.10.1"
+
+[dev-dependencies]
+criterion = { version = "0.8.2", default-features = false }
+
+[[bench]]
+name = "h11r"
+harness = false

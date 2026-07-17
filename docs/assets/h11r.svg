@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+     <!-- 07-front: same "1.1" snake, but a front-facing two-eye head. Max cute. -->
+     <rect x="0" y="0" width="256" height="256" rx="56" fill="#F6EEDF"/>
+
+     <!-- left "1" (tail end) -->
+     <path d="M96 100 C93 124 99 150 96 176" stroke="#A83B1C" stroke-width="34" fill="none" stroke-linecap="round"/>
+     <path d="M96 100 C93 124 99 150 96 176" stroke="#E4622C" stroke-width="26" fill="none" stroke-linecap="round"/>
+     <path d="M96 102 q-13 -11 -23 -2" stroke="#A83B1C" stroke-width="18" fill="none" stroke-linecap="round"/>
+     <path d="M96 102 q-13 -11 -23 -2" stroke="#E4622C" stroke-width="11" fill="none" stroke-linecap="round"/>
+     <path d="M97 114 C95 134 98 154 97 166" stroke="#FBE7C6" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.8"/>
+
+     <!-- byte dot (Python blue) -->
+     <circle cx="131" cy="168" r="12" fill="#2C5480"/>
+     <circle cx="131" cy="168" r="9" fill="#3B6EA5"/>
+
+     <!-- right "1" (head end) -->
+     <path d="M166 104 C163 126 169 152 166 178" stroke="#A83B1C" stroke-width="34" fill="none" stroke-linecap="round"/>
+     <path d="M166 104 C163 126 169 152 166 178" stroke="#E4622C" stroke-width="26" fill="none" stroke-linecap="round"/>
+     <path d="M167 118 C165 136 168 156 167 168" stroke="#FBE7C6" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.8"/>
+
+     <!-- front-facing head -->
+     <ellipse cx="166" cy="80" rx="28" ry="24" fill="#E4622C" stroke="#A83B1C" stroke-width="5"/>
+     <ellipse cx="150" cy="88" rx="6.5" ry="4.5" fill="#F2925E" opacity="0.65"/>
+     <ellipse cx="182" cy="88" rx="6.5" ry="4.5" fill="#F2925E" opacity="0.65"/>
+     <circle cx="156" cy="76" r="8" fill="#FFFFFF"/>
+     <circle cx="176" cy="76" r="8" fill="#FFFFFF"/>
+     <circle cx="157" cy="78" r="4.4" fill="#241A16"/>
+     <circle cx="177" cy="78" r="4.4" fill="#241A16"/>
+     <circle cx="158.5" cy="75.5" r="1.8" fill="#FFFFFF"/>
+     <circle cx="178.5" cy="75.5" r="1.8" fill="#FFFFFF"/>
+     <circle cx="162" cy="88" r="1.5" fill="#A83B1C"/>
+     <circle cx="170" cy="88" r="1.5" fill="#A83B1C"/>
+     <path d="M158 92 Q166 99 174 92" stroke="#A83B1C" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+     <!-- tongue -->
+     <path d="M166 96 v9 M166 105 l-4 4 M166 105 l4 4" stroke="#D2432B" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+   </svg>

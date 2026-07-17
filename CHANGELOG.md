@@ -1,6 +1,6 @@
 # Changelog
 
-User-visible changes to http11 are recorded here.
+User-visible changes to h11r are recorded here.
 
 ## [Unreleased]
 

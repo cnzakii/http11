@@ -1,4 +1,0 @@
-interface:
-  display_name: "http11 Audit"
-  short_description: "Review http11 for evidence-backed defects"
-  default_prompt: "Use $http11-audit to review the current http11 changes for defects and unnecessary complexity."

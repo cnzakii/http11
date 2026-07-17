@@ -1,5 +1,5 @@
 [package]
-name = "http11-fuzz"
+name = "h11r-fuzz"
 version = "0.0.0"
 publish = false
 edition = "2024"
@@ -9,25 +9,25 @@ cargo-fuzz = true
 
 [dependencies]
 libfuzzer-sys = "0.4"
-http11 = { path = "../crates/http11" }
+h11r = { path = "../crates/h11r" }
 
 [[bin]]
-name = "http11_receive"
-path = "fuzz_targets/http11_receive.rs"
+name = "h11r_receive"
+path = "fuzz_targets/h11r_receive.rs"
 test = false
 doc = false
 bench = false
 
 [[bin]]
-name = "http11_fragmentation"
-path = "fuzz_targets/http11_fragmentation.rs"
+name = "h11r_fragmentation"
+path = "fuzz_targets/h11r_fragmentation.rs"
 test = false
 doc = false
 bench = false
 
 [[bin]]
-name = "http11_send"
-path = "fuzz_targets/http11_send.rs"
+name = "h11r_send"
+path = "fuzz_targets/h11r_send.rs"
 test = false
 doc = false
 bench = false

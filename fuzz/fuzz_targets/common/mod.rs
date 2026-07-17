@@ -1,8 +1,8 @@
 // Each fuzz binary imports only the helpers needed by its own oracle.
 #![allow(dead_code)]
 
-use http11::Method;
-use http11::{
+use h11r::Method;
+use h11r::{
     Connection, EndOfMessage, Event, Header, Limits, NextEvent, Request, Role, State, Version,
 };
 

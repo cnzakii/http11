@@ -1,0 +1,4 @@
+interface:
+  display_name: "h11r Implementation"
+  short_description: "Implement focused h11r changes safely"
+  default_prompt: "Use $h11r-implementation to implement this h11r change and verify it."

@@ -1,17 +1,21 @@
-# http11
+<p align="center">
+  <img src="https://raw.githubusercontent.com/cnzakii/h11r/main/docs/assets/h11r.svg" width="144" height="144" alt="h11r logo">
+</p>
 
-[![CI](https://github.com/cnzakii/http11/actions/workflows/ci.yml/badge.svg)](https://github.com/cnzakii/http11/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/cnzakii/http11/graph/badge.svg)](https://codecov.io/gh/cnzakii/http11)
-[![PyPI](https://img.shields.io/pypi/v/http11.svg)](https://pypi.org/project/http11/)
-[![Crates.io](https://img.shields.io/crates/v/http11.svg)](https://crates.io/crates/http11)
-[![docs.rs](https://docs.rs/http11/badge.svg)](https://docs.rs/http11)
+# h11r
+
+[![CI](https://github.com/cnzakii/h11r/actions/workflows/ci.yml/badge.svg)](https://github.com/cnzakii/h11r/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/cnzakii/h11r/graph/badge.svg)](https://codecov.io/gh/cnzakii/h11r)
+[![PyPI](https://img.shields.io/pypi/v/h11r.svg)](https://pypi.org/project/h11r/)
+[![Crates.io](https://img.shields.io/crates/v/h11r.svg)](https://crates.io/crates/h11r)
+[![docs.rs](https://docs.rs/h11r/badge.svg)](https://docs.rs/h11r)
 [![Python 3.10–3.14](https://img.shields.io/badge/Python-3.10%20to%203.14-3776AB?logo=python&logoColor=white)][python-package]
 [![Rust 1.88+](https://img.shields.io/badge/Rust-1.88%2B-000000?logo=rust&logoColor=white)][rust-manifest]
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)][license-file]
 
 **A [Sans-I/O][sans-io] HTTP/1.1 protocol engine for Python, powered by Rust.**
 
-`http11` translates between bytes and HTTP events. It handles message framing,
+`h11r` translates between bytes and HTTP events. It handles message framing,
 connection state, and protocol errors without reading from or writing to the
 network. Connect it to synchronous sockets, asyncio, Trio, or any other
 transport that can move bytes.
@@ -22,14 +26,14 @@ package through PyO3. Its connection model is inspired by
 trailer head parsing is built on
 [`httparse`](https://github.com/seanmonstar/httparse).
 
-> `http11` is currently alpha software. Its public API may change before the
+> `h11r` is currently alpha software. Its public API may change before the
 > first stable release.
 
 ## Performance
 
-![Python benchmark comparing http11 and h11][benchmark-chart]
+![Python benchmark comparing h11r and h11][benchmark-chart]
 
-The chart compares protocol-layer throughput for `http11` and `h11 0.16.0`
+The chart compares protocol-layer throughput for `h11r` and `h11 0.16.0`
 across five equivalent Python HTTP/1.1 workloads that reuse their connections.
 Each workload uses public APIs and includes protocol state transitions. It does
 not include socket, TLS, or asynchronous runtime overhead. Higher is faster.
@@ -41,25 +45,25 @@ chart. Results will vary with hardware and Python version.
 
 ## Quick Start
 
-Add `http11` to a uv-managed project:
+Add `h11r` to a uv-managed project:
 
 ```console
-uv add http11
+uv add h11r
 ```
 
 Or install it with pip:
 
 ```console
-pip install http11
+pip install h11r
 ```
 
 This server-side example parses one request and produces a complete response.
 The caller remains responsible for network I/O.
 
 ```python
-import http11
+import h11r
 
-connection = http11.Connection(http11.Role.SERVER)
+connection = h11r.Connection(h11r.Role.SERVER)
 
 # Bytes received from any synchronous or asynchronous transport.
 connection.receive_data(
@@ -71,9 +75,9 @@ connection.receive_data(
 request = connection.next_event()
 end = connection.next_event()
 
-assert isinstance(request, http11.Request)
+assert isinstance(request, h11r.Request)
 assert request.method == b"GET"
-assert isinstance(end, http11.EndOfMessage)
+assert isinstance(end, h11r.EndOfMessage)
 
 # Write the returned bytes to the same transport.
 outbound = connection.send_response(
@@ -87,7 +91,7 @@ outbound += connection.end_of_message()
 
 ## A Protocol Component, Not an HTTP Client
 
-`http11` does not open sockets, choose a concurrency model, or handle TLS,
+`h11r` does not open sockets, choose a concurrency model, or handle TLS,
 connection pooling, redirects, cookies, or routing. It maintains the protocol
 state of one HTTP/1.1 connection while higher-level clients, servers, proxies,
 and test tools decide how to schedule I/O.
@@ -100,14 +104,14 @@ errors.
 
 ## Acknowledgements
 
-`http11` follows the [Sans-I/O][sans-io] approach of keeping protocol state
+`h11r` follows the [Sans-I/O][sans-io] approach of keeping protocol state
 separate from network I/O. Its connection lifecycle and event model are
 inspired by [`h11`](https://github.com/python-hyper/h11). It is not a drop-in
 replacement for `h11`; it is a Rust-powered Python implementation built in the
 same tradition.
 
 Low-level HTTP head parsing is provided by
-[`httparse`](https://github.com/seanmonstar/httparse). `http11` owns the full
+[`httparse`](https://github.com/seanmonstar/httparse). `h11r` owns the full
 message framing, connection state machine, resource boundaries, and Python
 API.
 
@@ -119,11 +123,11 @@ See [CONTRIBUTING.md][contributing-guide] for development and release guidance.
 
 MIT
 
-[benchmark-chart]: https://raw.githubusercontent.com/cnzakii/http11/main/docs/assets/python-benchmark.svg
-[benchmark-results]: https://github.com/cnzakii/http11/blob/main/docs/assets/python-benchmark.json
-[benchmark-script]: https://github.com/cnzakii/http11/blob/main/crates/http11-python/benchmarks/compare_h11.py
-[contributing-guide]: https://github.com/cnzakii/http11/blob/main/CONTRIBUTING.md
-[license-file]: https://github.com/cnzakii/http11/blob/main/LICENSE
-[python-package]: https://github.com/cnzakii/http11/blob/main/crates/http11-python/pyproject.toml
-[rust-manifest]: https://github.com/cnzakii/http11/blob/main/Cargo.toml
+[benchmark-chart]: https://raw.githubusercontent.com/cnzakii/h11r/main/docs/assets/python-benchmark.svg
+[benchmark-results]: https://github.com/cnzakii/h11r/blob/main/docs/assets/python-benchmark.json
+[benchmark-script]: https://github.com/cnzakii/h11r/blob/main/crates/h11r-python/benchmarks/compare_h11.py
+[contributing-guide]: https://github.com/cnzakii/h11r/blob/main/CONTRIBUTING.md
+[license-file]: https://github.com/cnzakii/h11r/blob/main/LICENSE
+[python-package]: https://github.com/cnzakii/h11r/blob/main/crates/h11r-python/pyproject.toml
+[rust-manifest]: https://github.com/cnzakii/h11r/blob/main/Cargo.toml
 [sans-io]: https://sans-io.readthedocs.io/

@@ -1,0 +1,4 @@
+interface:
+  display_name: "h11r Knowledge"
+  short_description: "Verify HTTP/1.1 engineering facts from sources"
+  default_prompt: "Use $h11r-knowledge to verify this HTTP/1.1 engineering claim from primary sources."

@@ -4,8 +4,8 @@ requires-python = ">=3.10"
 
 [manifest]
 members = [
-    "http11",
-    "http11-workspace",
+    "h11r",
+    "h11r-workspace",
 ]
 
 [[package]]
@@ -137,11 +137,11 @@ wheels = [
 ]
 
 [[package]]
-name = "http11"
-source = { editable = "crates/http11-python" }
+name = "h11r"
+source = { editable = "crates/h11r-python" }
 
 [[package]]
-name = "http11-workspace"
+name = "h11r-workspace"
 version = "0.1.0"
 source = { virtual = "." }
 

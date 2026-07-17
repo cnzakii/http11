@@ -1,0 +1,4 @@
+interface:
+  display_name: "h11r Audit"
+  short_description: "Review h11r for evidence-backed defects"
+  default_prompt: "Use $h11r-audit to review the current h11r changes for defects and unnecessary complexity."

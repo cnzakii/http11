@@ -48,7 +48,7 @@ jobs:
           test -n "$version"
           echo "version=v$version" >> "$GITHUB_OUTPUT"
       - run: make check
-      - run: cargo publish --dry-run -p http11 --locked
+      - run: cargo publish --dry-run -p h11r --locked
 
   wheels:
     name: Wheel (${{ matrix.artifact }})
@@ -89,21 +89,21 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           maturin-version: ${{ needs.validate.outputs.maturin-version }}
-          working-directory: crates/http11-python
+          working-directory: crates/h11r-python
           target: ${{ matrix.target }}
           manylinux: ${{ matrix.manylinux }}
           args: --release --locked --compatibility pypi --out dist
       - name: Smoke-test native wheel
         if: matrix.artifact != 'manylinux-aarch64'
         shell: bash
-        working-directory: crates/http11-python
+        working-directory: crates/h11r-python
         run: |
           python -m pip install dist/*.whl
-          python -c "import http11"
+          python -c "import h11r"
       - uses: actions/upload-artifact@v7
         with:
           name: python-${{ matrix.artifact }}
-          path: crates/http11-python/dist/*.whl
+          path: crates/h11r-python/dist/*.whl
           if-no-files-found: error
 
   sdist:
@@ -123,16 +123,16 @@ jobs:
         with:
           command: sdist
           maturin-version: ${{ needs.validate.outputs.maturin-version }}
-          working-directory: crates/http11-python
+          working-directory: crates/h11r-python
           args: --out dist
       - name: Smoke-test source distribution
         run: |
-          python -m pip install crates/http11-python/dist/*.tar.gz
-          python -c "import http11"
+          python -m pip install crates/h11r-python/dist/*.tar.gz
+          python -c "import h11r"
       - uses: actions/upload-artifact@v7
         with:
           name: python-sdist
-          path: crates/http11-python/dist/*.tar.gz
+          path: crates/h11r-python/dist/*.tar.gz
           if-no-files-found: error
 
   publish-pypi:
@@ -172,9 +172,9 @@ jobs:
           VERSION: ${{ needs.validate.outputs.version }}
         run: |
           status="$(curl --silent \
-            --user-agent "http11-release (+https://github.com/$GITHUB_REPOSITORY)" \
+            --user-agent "h11r-release (+https://github.com/$GITHUB_REPOSITORY)" \
             --output /dev/null --write-out '%{http_code}' \
-            "https://crates.io/api/v1/crates/http11/$VERSION")"
+            "https://crates.io/api/v1/crates/h11r/$VERSION")"
           case "$status" in
             200) exists=true ;;
             404) exists=false ;;
@@ -187,7 +187,7 @@ jobs:
         uses: rust-lang/crates-io-auth-action@v1
       - name: Publish crate
         if: steps.crate.outputs.exists == 'false'
-        run: cargo publish -p http11 --locked
+        run: cargo publish -p h11r --locked
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
 

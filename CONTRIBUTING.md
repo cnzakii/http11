@@ -1,13 +1,13 @@
-# Contributing to http11
+# Contributing to h11r
 
-Thank you for your interest in improving http11.
+Thank you for your interest in improving h11r.
 
 ## Before You Start
 
 Bug fixes, tests, documentation, API feedback, performance improvements, and
 changes that simplify the implementation are welcome.
 
-http11 is a Sans-I/O HTTP/1.1 protocol library. Work outside that scope is not
+h11r is a Sans-I/O HTTP/1.1 protocol library. Work outside that scope is not
 accepted. Please open an issue before starting a new public API, changing
 protocol behavior, or making a substantial design change. Small bug fixes and
 documentation improvements can go directly to a pull request.
@@ -29,9 +29,9 @@ You need:
 Fork the repository, then clone your fork:
 
 ```console
-git clone https://github.com/<your-name>/http11.git
-cd http11
-git remote add upstream https://github.com/cnzakii/http11.git
+git clone https://github.com/<your-name>/h11r.git
+cd h11r
+git remote add upstream https://github.com/cnzakii/h11r.git
 ```
 
 Install the Rust components and locked development dependencies:
@@ -89,9 +89,9 @@ The complete GitHub Actions matrix runs after the pull request is opened.
 Build the Python extension in release mode before running the Python benchmark:
 
 ```console
-uv --directory crates/http11-python run --locked maturin develop --release
+uv --directory crates/h11r-python run --locked maturin develop --release
 uv run --locked --group benchmark python \
-  crates/http11-python/benchmarks/compare_h11.py
+  crates/h11r-python/benchmarks/compare_h11.py
 ```
 
 Report the workload, environment, versions, and before-and-after results. A
@@ -150,7 +150,7 @@ Rust crate to crates.io, then creates the GitHub Release.
 
 Before the first automated release, configure the PyPI trusted publisher and
 the GitHub `release` environment. crates.io requires the first crate version to
-be published manually with `cargo publish -p http11 --locked`; configure its
+be published manually with `cargo publish -p h11r --locked`; configure its
 trusted publisher after that first publication.
 
 ### Recovering a Partial Release

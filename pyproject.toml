@@ -1,5 +1,5 @@
 [project]
-name = "http11-workspace"
+name = "h11r-workspace"
 version = "0.1.0"
 requires-python = ">=3.10"
 
@@ -26,7 +26,7 @@ benchmark = [
 package = false
 
 [tool.uv.workspace]
-members = ["crates/http11-python"]
+members = ["crates/h11r-python"]
 
 [tool.ruff.lint]
 select = [
@@ -51,20 +51,20 @@ select = [
 ]
 
 [tool.ty.src]
-include = ["crates/http11-python/python"]
+include = ["crates/h11r-python/python"]
 
 # coverage.py measures the Python facade. cargo-llvm-cov measures Rust and the
 # PyO3 extension.
 [tool.coverage.run]
 branch = true
-source = ["http11"]
+source = ["h11r"]
 
 [tool.coverage.report]
 show_missing = true
 
 [tool.pytest]
 minversion = "9.0"
-testpaths = ["crates/http11-python/tests"]
+testpaths = ["crates/h11r-python/tests"]
 strict_config = true
 strict_markers = true
 strict_parametrization_ids = true

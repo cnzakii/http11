@@ -1,0 +1,17 @@
+[package]
+name = "h11r-python"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+description = "Python bindings for the h11r protocol engine"
+repository = "https://github.com/cnzakii/h11r"
+
+[lib]
+name = "_core"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.29.0", features = ["abi3-py310"] }
+h11r = { path = "../h11r" }

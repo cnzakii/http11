@@ -17,7 +17,7 @@ test-rust:
 	cargo test --workspace --all-features --locked
 
 test-python:
-	uv --directory crates/http11-python run --locked maturin develop --release
+	uv --directory crates/h11r-python run --locked maturin develop --release
 	uv run --locked pytest
 
 # Use one LLVM environment for Cargo tests and the PyO3 extension build so the
@@ -27,7 +27,7 @@ coverage:
 	eval "$$(cargo llvm-cov show-env --sh)"; \
 	cargo llvm-cov clean --workspace; \
 	cargo test --workspace --all-features --locked; \
-	uv --directory crates/http11-python run --locked maturin develop; \
+	uv --directory crates/h11r-python run --locked maturin develop; \
 	uv run --locked coverage run -m pytest; \
 	uv run --locked coverage xml; \
 	cargo llvm-cov report --lcov --output-path rust.lcov

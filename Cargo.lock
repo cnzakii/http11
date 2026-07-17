@@ -164,6 +164,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
 
 [[package]]
+name = "h11r"
+version = "0.1.0"
+dependencies = [
+ "criterion",
+ "httparse",
+]
+
+[[package]]
+name = "h11r-python"
+version = "0.1.0"
+dependencies = [
+ "h11r",
+ "pyo3",
+]
+
+[[package]]
 name = "half"
 version = "2.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -179,22 +195,6 @@ name = "heck"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
-
-[[package]]
-name = "http11"
-version = "0.1.0"
-dependencies = [
- "criterion",
- "httparse",
-]
-
-[[package]]
-name = "http11-python"
-version = "0.1.0"
-dependencies = [
- "http11",
- "pyo3",
-]
 
 [[package]]
 name = "httparse"
