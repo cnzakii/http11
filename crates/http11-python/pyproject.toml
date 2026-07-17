@@ -5,17 +5,22 @@ build-backend = "maturin"
 [project]
 name = "http11"
 dynamic = ["version"]
-description = "Sans-I/O HTTP/1.1 protocol engine for Python"
+description = "A Sans-I/O HTTP/1.1 protocol engine for Python, powered by Rust."
 readme = "../../README.md"
 requires-python = ">=3.10"
 license = "MIT"
 license-files = ["LICENSE", "LICENSE.h11"]
-keywords = ["sans-io"]
+keywords = ["http", "http1", "http11", "protocol", "rust", "sans-io"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Rust",
     "Topic :: Internet :: WWW/HTTP",
@@ -24,6 +29,7 @@ classifiers = [
 dependencies = []
 
 [project.urls]
+Changelog = "https://github.com/cnzakii/http11/blob/main/CHANGELOG.md"
 Source = "https://github.com/cnzakii/http11"
 Issues = "https://github.com/cnzakii/http11/issues"
 

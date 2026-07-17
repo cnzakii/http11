@@ -1,6 +1,10 @@
 # http11
 
 [![CI](https://github.com/cnzakii/http11/actions/workflows/ci.yml/badge.svg)](https://github.com/cnzakii/http11/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/cnzakii/http11/graph/badge.svg)](https://codecov.io/gh/cnzakii/http11)
+[![PyPI](https://img.shields.io/pypi/v/http11.svg)](https://pypi.org/project/http11/)
+[![Crates.io](https://img.shields.io/crates/v/http11.svg)](https://crates.io/crates/http11)
+[![docs.rs](https://docs.rs/http11/badge.svg)](https://docs.rs/http11)
 [![Python 3.10–3.14](https://img.shields.io/badge/Python-3.10%20to%203.14-3776AB?logo=python&logoColor=white)][python-package]
 [![Rust 1.88+](https://img.shields.io/badge/Rust-1.88%2B-000000?logo=rust&logoColor=white)][rust-manifest]
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)][license-file]
