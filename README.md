@@ -1,19 +1,23 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/cnzakii/h11r/main/docs/assets/h11r.svg" width="144" height="144" alt="h11r logo">
+  <img src="https://github.com/cnzakii/h11r/raw/refs/heads/main/docs/assets/h11r.svg" width="144" height="144" alt="h11r logo">
 </p>
 
-# h11r
+<h1 align="center">h11r</h1>
 
-[![CI](https://github.com/cnzakii/h11r/actions/workflows/ci.yml/badge.svg)](https://github.com/cnzakii/h11r/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/cnzakii/h11r/graph/badge.svg)](https://codecov.io/gh/cnzakii/h11r)
-[![PyPI](https://img.shields.io/pypi/v/h11r.svg)](https://pypi.org/project/h11r/)
-[![Crates.io](https://img.shields.io/crates/v/h11r.svg)](https://crates.io/crates/h11r)
-[![docs.rs](https://docs.rs/h11r/badge.svg)](https://docs.rs/h11r)
-[![Python 3.10–3.14](https://img.shields.io/badge/Python-3.10%20to%203.14-3776AB?logo=python&logoColor=white)][python-package]
-[![Rust 1.88+](https://img.shields.io/badge/Rust-1.88%2B-000000?logo=rust&logoColor=white)][rust-manifest]
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)][license-file]
+<p align="center">
+  <strong>A <a href="https://sans-io.readthedocs.io/">Sans-I/O</a> HTTP/1.1 protocol engine for Python, powered by Rust.</strong>
+</p>
 
-**A [Sans-I/O][sans-io] HTTP/1.1 protocol engine for Python, powered by Rust.**
+<p align="center">
+  <a href="https://github.com/cnzakii/h11r/actions/workflows/ci.yml"><img src="https://github.com/cnzakii/h11r/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://codecov.io/gh/cnzakii/h11r"><img src="https://codecov.io/gh/cnzakii/h11r/graph/badge.svg" alt="codecov"></a>
+  <a href="https://pypi.org/project/h11r/"><img src="https://img.shields.io/pypi/v/h11r.svg" alt="PyPI"></a>
+  <a href="https://crates.io/crates/h11r"><img src="https://img.shields.io/crates/v/h11r.svg" alt="Crates.io"></a>
+  <a href="https://docs.rs/h11r"><img src="https://docs.rs/h11r/badge.svg" alt="docs.rs"></a>
+  <a href="https://github.com/cnzakii/h11r/blob/main/crates/h11r-python/pyproject.toml"><img src="https://img.shields.io/badge/Python-3.10%20to%203.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10–3.14"></a>
+  <a href="https://github.com/cnzakii/h11r/blob/main/Cargo.toml"><img src="https://img.shields.io/badge/Rust-1.88%2B-000000?logo=rust&amp;logoColor=white" alt="Rust 1.88+"></a>
+  <a href="https://github.com/cnzakii/h11r/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+</p>
 
 `h11r` translates between bytes and HTTP events. It handles message framing,
 connection state, and protocol errors without reading from or writing to the
@@ -127,7 +131,4 @@ MIT
 [benchmark-results]: https://github.com/cnzakii/h11r/blob/main/docs/assets/python-benchmark.json
 [benchmark-script]: https://github.com/cnzakii/h11r/blob/main/crates/h11r-python/benchmarks/compare_h11.py
 [contributing-guide]: https://github.com/cnzakii/h11r/blob/main/CONTRIBUTING.md
-[license-file]: https://github.com/cnzakii/h11r/blob/main/LICENSE
-[python-package]: https://github.com/cnzakii/h11r/blob/main/crates/h11r-python/pyproject.toml
-[rust-manifest]: https://github.com/cnzakii/h11r/blob/main/Cargo.toml
 [sans-io]: https://sans-io.readthedocs.io/
