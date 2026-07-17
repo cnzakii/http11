@@ -17,3 +17,6 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    ignore:
+      # `@1.88` selects the tested MSRV, not an action version to advance.
+      - dependency-name: dtolnay/rust-toolchain
