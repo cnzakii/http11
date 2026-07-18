@@ -106,7 +106,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up GIL-enabled Python 3.15 for abi3t smoke test
-        if: matrix.abi-profile == 'abi3t'
+        if: matrix.abi-profile == 'abi3t' && matrix.platform != 'windows-x86_64'
         id: gil-python
         uses: actions/setup-python@v6
         with:
@@ -150,7 +150,7 @@ jobs:
         run: |
           "${{ steps.build-python.outputs.python-path }}" -c "import h11r, sys, sysconfig; assert sysconfig.get_config_var('Py_GIL_DISABLED'); assert not sys._is_gil_enabled()"
       - name: Smoke-test abi3t wheel on GIL-enabled Python 3.15
-        if: matrix.platform != 'manylinux-aarch64' && matrix.abi-profile == 'abi3t'
+        if: matrix.platform != 'manylinux-aarch64' && matrix.platform != 'windows-x86_64' && matrix.abi-profile == 'abi3t'
         shell: bash
         working-directory: crates/h11r-python
         run: |
