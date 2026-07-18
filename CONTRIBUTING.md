@@ -88,9 +88,9 @@ locally:
 
 ```console
 uv sync --locked --python 3.14t
-make test-python
+UV_PYTHON=3.14t make test-python
 uv sync --locked --python 3.15t
-make test-python
+UV_PYTHON=3.15t make test-python
 ```
 
 The complete GitHub Actions matrix runs after the pull request is opened.
