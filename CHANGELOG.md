@@ -4,6 +4,8 @@ User-visible changes to h11r are recorded here.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-21
+
 ### Added
 
 - Support for free-threaded CPython 3.14t, including version-specific wheels,
