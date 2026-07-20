@@ -6,8 +6,8 @@ User-visible changes to h11r are recorded here.
 
 ### Added
 
-- Support for GIL-enabled CPython 3.15 and free-threaded CPython 3.14t and
-  3.15t, including version-specific 3.14t and stable-ABI 3.15t wheels.
+- Support for free-threaded CPython 3.14t, including version-specific wheels,
+  with preview CI coverage for GIL-enabled and free-threaded CPython 3.15.
 - Parallel operation across independent Python `Connection` instances;
   operations on one connection remain caller-serialized in protocol order.
 

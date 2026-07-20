@@ -1,6 +1,9 @@
 name: Release
 
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/release.yml"
   push:
     tags: ["v*"]
 
@@ -9,7 +12,7 @@ permissions:
 
 concurrency:
   group: release-${{ github.ref_name }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   CARGO_TERM_COLOR: always
@@ -26,10 +29,13 @@ jobs:
         with:
           persist-credentials: false
       - uses: astral-sh/setup-uv@v8.3.2
+        with:
+          enable-cache: false
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
       - name: Verify tag and package version
+        if: github.event_name == 'push'
         id: version
         env:
           RELEASE_TAG: ${{ github.ref_name }}
@@ -63,14 +69,15 @@ jobs:
           - macos-x86_64
           - macos-aarch64
           - windows-x86_64
-        abi-profile: [abi3, cp314t, abi3t]
+          - windows-aarch64
+        abi-profile: [abi3, cp314t]
         include:
           - platform: manylinux-x86_64
             os: ubuntu-22.04
             target: x86_64
             manylinux: "2014"
           - platform: manylinux-aarch64
-            os: ubuntu-22.04
+            os: ubuntu-24.04-arm
             target: aarch64
             manylinux: "2014"
           - platform: macos-x86_64
@@ -85,6 +92,10 @@ jobs:
             os: windows-latest
             target: x64
             manylinux: auto
+          - platform: windows-aarch64
+            os: windows-11-arm
+            target: aarch64
+            manylinux: auto
           - abi-profile: abi3
             python-version: "3.12"
             manylinux-interpreter: /opt/python/cp312-cp312/bin/python
@@ -93,10 +104,6 @@ jobs:
             python-version: "3.14t"
             manylinux-interpreter: /opt/python/cp314-cp314t/bin/python
             wheel-tag: cp314-cp314t
-          - abi-profile: abi3t
-            python-version: "3.15t"
-            manylinux-interpreter: /opt/python/cp315-cp315t/bin/python
-            wheel-tag: cp315-abi3.abi3t
     steps:
       - uses: actions/checkout@v7
         with:
@@ -105,13 +112,6 @@ jobs:
         id: build-python
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Set up GIL-enabled Python 3.15 for abi3t smoke test
-        if: matrix.abi-profile == 'abi3t' && matrix.platform != 'windows-x86_64'
-        id: gil-python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.15"
-          update-environment: false
       - name: Build wheel
         uses: PyO3/maturin-action@v1
         with:
@@ -138,24 +138,16 @@ jobs:
           esac
           echo "path=$wheel" >> "$GITHUB_OUTPUT"
       - name: Smoke-test native wheel
-        if: matrix.platform != 'manylinux-aarch64'
         shell: bash
         working-directory: crates/h11r-python
         run: |
           "${{ steps.build-python.outputs.python-path }}" -m pip install "${{ steps.wheel.outputs.path }}"
           "${{ steps.build-python.outputs.python-path }}" -c "import h11r"
       - name: Verify free-threaded import leaves the GIL disabled
-        if: matrix.platform != 'manylinux-aarch64' && matrix.abi-profile != 'abi3'
+        if: matrix.abi-profile != 'abi3'
         shell: bash
         run: |
           "${{ steps.build-python.outputs.python-path }}" -c "import h11r, sys, sysconfig; assert sysconfig.get_config_var('Py_GIL_DISABLED'); assert not sys._is_gil_enabled()"
-      - name: Smoke-test abi3t wheel on GIL-enabled Python 3.15
-        if: matrix.platform != 'manylinux-aarch64' && matrix.platform != 'windows-x86_64' && matrix.abi-profile == 'abi3t'
-        shell: bash
-        working-directory: crates/h11r-python
-        run: |
-          "${{ steps.gil-python.outputs.python-path }}" -m pip install "${{ steps.wheel.outputs.path }}"
-          "${{ steps.gil-python.outputs.python-path }}" -c "import h11r"
       - uses: actions/upload-artifact@v7
         with:
           name: python-${{ matrix.platform }}-${{ matrix.abi-profile }}
@@ -193,6 +185,7 @@ jobs:
 
   publish-pypi:
     name: Publish to PyPI
+    if: github.event_name == 'push'
     needs: [validate, wheels, sdist]
     runs-on: ubuntu-latest
     environment: release
@@ -211,6 +204,7 @@ jobs:
 
   publish-crate:
     name: Publish to crates.io
+    if: github.event_name == 'push'
     needs: [validate, wheels, sdist]
     runs-on: ubuntu-latest
     environment: release
@@ -249,6 +243,7 @@ jobs:
 
   github-release:
     name: Publish GitHub release
+    if: github.event_name == 'push'
     needs: [publish-pypi, publish-crate]
     runs-on: ubuntu-latest
     permissions:

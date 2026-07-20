@@ -53,18 +53,33 @@ jobs:
       - run: make test-rust
 
   python:
-    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    name: Python ${{ matrix.python-version }}${{ matrix.preview && ' preview' || '' }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      # Linux covers every supported Python minor. The macOS lane exercises
-      # the native extension without multiplying the full matrix.
       matrix:
         os: [ubuntu-latest]
-        python-version:
-          ["3.10", "3.11", "3.12", "3.13", "3.14", "3.15", "3.14t", "3.15t"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "3.14t"]
         include:
+          # Prerelease interpreters provide forward-compatibility coverage;
+          # they are not part of the supported release matrix yet.
+          - os: ubuntu-latest
+            python-version: "3.15"
+            preview: true
+          - os: ubuntu-latest
+            python-version: "3.15t"
+            preview: true
+          # One interpreter per additional platform exercises the native
+          # extension without multiplying the full version matrix.
+          - os: ubuntu-24.04-arm
+            python-version: "3.12"
+          - os: macos-15-intel
+            python-version: "3.12"
           - os: macos-latest
+            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.12"
+          - os: windows-11-arm
             python-version: "3.12"
     steps:
       - uses: actions/checkout@v7
@@ -75,7 +90,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: dtolnay/rust-toolchain@stable
       - run: uv sync --locked
-      - run: make test-python
+      - run: uv --directory crates/h11r-python run --locked maturin develop --release
+      - run: uv run --locked pytest
 
   coverage:
     name: Coverage

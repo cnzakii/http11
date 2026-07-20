@@ -14,7 +14,7 @@
   <a href="https://pypi.org/project/h11r/"><img src="https://img.shields.io/pypi/v/h11r.svg" alt="PyPI"></a>
   <a href="https://crates.io/crates/h11r"><img src="https://img.shields.io/crates/v/h11r.svg" alt="Crates.io"></a>
   <a href="https://docs.rs/h11r"><img src="https://docs.rs/h11r/badge.svg" alt="docs.rs"></a>
-  <a href="https://github.com/cnzakii/h11r/blob/main/crates/h11r-python/pyproject.toml"><img src="https://img.shields.io/badge/Python-3.10%20to%203.15-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10–3.15"></a>
+  <a href="https://github.com/cnzakii/h11r/blob/main/crates/h11r-python/pyproject.toml"><img src="https://img.shields.io/badge/Python-3.10%20to%203.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10–3.14"></a>
   <a href="https://github.com/cnzakii/h11r/blob/main/Cargo.toml"><img src="https://img.shields.io/badge/Rust-1.88%2B-000000?logo=rust&amp;logoColor=white" alt="Rust 1.88+"></a>
   <a href="https://github.com/cnzakii/h11r/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
 </p>
@@ -125,10 +125,11 @@ protocol handoff after Upgrade. Input size and header count have independent
 limits, and local API misuse is reported separately from remote protocol
 errors.
 
-The Python package supports GIL-enabled CPython 3.10 through 3.15 and
-free-threaded CPython 3.14t and 3.15t. Independent `Connection` instances may
-run in parallel. Operations on one connection still have protocol order and
-must be serialized by its caller.
+The Python package supports GIL-enabled CPython 3.10 through 3.14 and
+free-threaded CPython 3.14t. CI also exercises CPython 3.15 and 3.15t while
+they are prereleases. Independent `Connection` instances may run in parallel.
+Operations on one connection still have protocol order and must be serialized
+by its caller.
 
 ## Acknowledgements
 

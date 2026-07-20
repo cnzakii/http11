@@ -42,9 +42,10 @@ uv sync --locked
 ```
 
 The default development version is Python 3.12. Continuous integration tests
-GIL-enabled Python 3.10 through 3.15, free-threaded Python 3.14t and 3.15t, and
-a macOS native-extension lane; contributors do not need to reproduce the full
-matrix locally.
+GIL-enabled Python 3.10 through 3.14 and free-threaded Python 3.14t on Linux.
+One interpreter also runs on each wheel target, while prerelease Python 3.15
+and 3.15t are tested for forward compatibility. Contributors do not need to
+reproduce the full matrix locally.
 
 ## Making Changes
 
@@ -89,9 +90,9 @@ locally:
 ```console
 uv sync --locked --python 3.14t
 UV_PYTHON=3.14t make test-python
-uv sync --locked --python 3.15t
-UV_PYTHON=3.15t make test-python
 ```
+
+Use `3.15t` in the same commands to exercise the prerelease interpreter.
 
 The complete GitHub Actions matrix runs after the pull request is opened.
 
