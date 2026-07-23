@@ -1,8 +1,1 @@
-blank_issues_enabled: true
-contact_links:
-  - name: Report a security vulnerability
-    url: https://github.com/cnzakii/h11r/security/advisories/new
-    about: Send suspected vulnerabilities privately to the maintainers.
-  - name: Read the documentation
-    url: https://cnzakii.github.io/h11r/
-    about: Review the guides and API reference before opening an issue.
+blank_issues_enabled: false

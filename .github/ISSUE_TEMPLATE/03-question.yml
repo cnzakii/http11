@@ -3,31 +3,10 @@ description: Ask about using or integrating h11r
 title: "[Question] "
 labels: ["question"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Check the [documentation](https://cnzakii.github.io/h11r/) first. Questions about sockets, TLS, async runtimes, complete clients, or servers may belong to the relevant integration project.
-
   - type: textarea
     id: question
     attributes:
       label: Question
-      description: Explain what you are trying to build and where you are stuck.
+      description: Explain what you are building and where you are stuck. Include a small example when it helps.
     validations:
       required: true
-
-  - type: textarea
-    id: example
-    attributes:
-      label: Relevant example
-      description: Include a small code sample, protocol events, or HTTP bytes when they clarify the question.
-    validations:
-      required: false
-  - type: input
-    id: version
-    attributes:
-      label: h11r version
-      description: Provide the version you are using when the question depends on current behavior.
-      placeholder: e.g. 0.1.1
-    validations:
-      required: false

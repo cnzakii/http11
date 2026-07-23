@@ -3,51 +3,19 @@ description: Report reproducible incorrect behavior in h11r
 title: "[Bug] "
 labels: ["bug"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        h11r is a Sans-I/O HTTP/1.1 protocol library. For suspected security vulnerabilities, use the private reporting link in the issue chooser instead of this form.
-
   - type: textarea
-    id: problem
+    id: summary
     attributes:
-      label: What happened?
-      description: Describe the observed behavior and what you expected instead.
-    validations:
-      required: true
-
-  - type: textarea
-    id: reproducer
-    attributes:
-      label: Minimal reproducer
-      description: Provide the smallest runnable Rust or Python example, including the relevant HTTP bytes or events.
-      placeholder: |
-        Paste a complete example and its output here.
+      label: Summary
+      description: Describe what happened, what you expected, and—when possible—the smallest code or HTTP bytes that reproduce it. Include the complete error output.
     validations:
       required: true
 
   - type: input
     id: version
     attributes:
-      label: h11r version
-      description: Provide the released version or commit you tested.
+      label: Version
+      description: Which h11r version or commit are you using, if known?
       placeholder: e.g. 0.1.1 or d1f97e3
-    validations:
-      required: true
-
-  - type: textarea
-    id: environment
-    attributes:
-      label: Environment
-      description: Include the Rust or Python version, operating system, and architecture.
-      placeholder: e.g. Python 3.12.6 on macOS 15 arm64
-    validations:
-      required: true
-
-  - type: textarea
-    id: context
-    attributes:
-      label: Additional context
-      description: Add logs, traces, or related links if they help explain the problem.
     validations:
       required: false
