@@ -1089,8 +1089,8 @@ connection. Lower time and higher relative throughput are better.</p>
 <p>This is not an end-to-end server benchmark. It excludes socket, TLS, async
 runtime, and application overhead, and its result does not predict every
 workload or machine.</p>
-<p><a href="https://github.com/cnzakii/h11r/blob/d1f97e32b12f5f54af5541738b13541803579488/crates/h11r-python/benchmarks/compare_h11.py">Benchmark script ↗</a> ·
-<a href="https://github.com/cnzakii/h11r/blob/d1f97e32b12f5f54af5541738b13541803579488/docs/assets/python-benchmark.json">Raw <code>pyperf</code> result ↗</a></p>
+<p><a href="https://github.com/cnzakii/h11r/blob/34ab19b4cc1283019b69b9fda8d496f77d35f85b/crates/h11r-python/benchmarks/compare_h11.py">Benchmark script ↗</a> ·
+<a href="https://github.com/cnzakii/h11r/blob/34ab19b4cc1283019b69b9fda8d496f77d35f85b/docs/assets/python-benchmark.json">Raw <code>pyperf</code> result ↗</a></p>
 <h2 id="relationship-to-h11">Relationship to h11<a class="headerlink" href="#relationship-to-h11" title="Permanent link">&para;</a></h2>
 <p><code>h11r</code> follows the Sans-I/O connection and event model established by
 <a href="https://github.com/python-hyper/h11"><code>h11</code> ↗</a>, but it does not depend on <code>h11</code>
@@ -1104,7 +1104,7 @@ limits, wire serialization, and its public Rust and Python APIs.</p>
 <p>Interoperability tests exercise both <code>h11r</code>-client/<code>h11</code>-server and
 <code>h11</code>-client/<code>h11r</code>-server exchanges at the HTTP wire boundary. <code>h11</code> remains
 a mature pure-Python library with its own established API and ecosystem.</p>
-<p><a href="https://github.com/cnzakii/h11r/blob/d1f97e32b12f5f54af5541738b13541803579488/crates/h11r-python/tests/test_interop.py">Inspect the interoperability tests ↗</a></p>
+<p><a href="https://github.com/cnzakii/h11r/blob/34ab19b4cc1283019b69b9fda8d496f77d35f85b/crates/h11r-python/tests/test_interop.py">Inspect the interoperability tests ↗</a></p>
 <p>Use the <a href="api/">Python API reference</a> for parameters, return values, behavior,
 and exceptions.</p>
 <p>The Rust core has a separate
