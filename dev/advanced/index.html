@@ -1013,7 +1013,7 @@ be validated after the final body chunk without buffering the entire body.</p>
 <div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="go">uv run python examples/python/streaming_body.py</span>
 </span></code></pre></div>
 <p>Success ends with <code>streamed 36 bytes without collecting the body</code>.</p>
-<p><a href="https://github.com/cnzakii/h11r/blob/34ab19b4cc1283019b69b9fda8d496f77d35f85b/examples/python/streaming_body.py">Read <code>streaming_body.py</code> ↗</a></p>
+<p><a href="https://github.com/cnzakii/h11r/blob/9dc3062ec2493b71c207ace4e08d38996e14ff3e/examples/python/streaming_body.py">Read <code>streaming_body.py</code> ↗</a></p>
 <h2 id="preserve-an-existing-body-buffer">Preserve an existing body buffer<a class="headerlink" href="#preserve-an-existing-body-buffer" title="Permanent link">&para;</a></h2>
 <p><code>send_data()</code> returns one convenient <code>bytes</code> object containing the body and any
 required framing. For a large, contiguous body that already exists in memory,
@@ -1028,7 +1028,7 @@ required framing. For a large, contiguous body that already exists in memory,
 protocol-layer serialization cost for a large body. Keep <code>send_data()</code> as the
 simpler default for small bodies and measure the complete write path on the
 transport you actually use.</p>
-<p><a href="https://github.com/cnzakii/h11r/blob/34ab19b4cc1283019b69b9fda8d496f77d35f85b/crates/h11r/benches/h11r.rs">Inspect the 64 KiB body benchmark ↗</a></p>
+<p><a href="https://github.com/cnzakii/h11r/blob/9dc3062ec2493b71c207ace4e08d38996e14ff3e/crates/h11r/benches/h11r.rs">Inspect the 64 KiB body benchmark ↗</a></p>
 <p>This is buffer preservation at the <code>h11r</code> boundary, not an end-to-end zero-copy
 guarantee. Keep <code>original_body</code> alive and unchanged until all writes complete,
 and preserve the returned order. Use this path only when the transport can
@@ -1039,7 +1039,7 @@ Here, <code>write_all()</code> is the complete-write operation supplied by your
 <div class="language-console highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="go">uv run python examples/python/zero_copy_body.py</span>
 </span></code></pre></div>
 <p>Success ends with <code>upload exchange is complete and the connection is reusable</code>.</p>
-<p><a href="https://github.com/cnzakii/h11r/blob/34ab19b4cc1283019b69b9fda8d496f77d35f85b/examples/python/zero_copy_body.py">Read <code>zero_copy_body.py</code> ↗</a></p>
+<p><a href="https://github.com/cnzakii/h11r/blob/9dc3062ec2493b71c207ace4e08d38996e14ff3e/examples/python/zero_copy_body.py">Read <code>zero_copy_body.py</code> ↗</a></p>
 <h2 id="handle-pipelined-requests">Handle pipelined requests<a class="headerlink" href="#handle-pipelined-requests" title="Permanent link">&para;</a></h2>
 <p>A peer can send another request before receiving the current response. <code>h11r</code>
 keeps the later request buffered and returns <code>PAUSED</code> until the current
@@ -1049,7 +1049,7 @@ becomes visible without allowing responses to be reordered.</p>
 <div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="go">uv run python examples/python/pipelining.py</span>
 </span></code></pre></div>
 <p>Success ends with <code>both pipelined responses were sent in request order</code>.</p>
-<p><a href="https://github.com/cnzakii/h11r/blob/34ab19b4cc1283019b69b9fda8d496f77d35f85b/examples/python/pipelining.py">Read <code>pipelining.py</code> ↗</a></p>
+<p><a href="https://github.com/cnzakii/h11r/blob/9dc3062ec2493b71c207ace4e08d38996e14ff3e/examples/python/pipelining.py">Read <code>pipelining.py</code> ↗</a></p>
 <h2 id="protocol-handoff">Protocol handoff<a class="headerlink" href="#protocol-handoff" title="Permanent link">&para;</a></h2>
 <p>After a successful Upgrade or CONNECT switch, HTTP processing stops at an
 exact byte boundary. Read <code>trailing_data</code> and pass any retained bytes to the
@@ -1064,7 +1064,7 @@ and connection lifecycle.</p>
 <div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="go">uv run python examples/python/websocket_upgrade.py</span>
 </span></code></pre></div>
 <p>Success ends with <code>client received WebSocket text: 'welcome'</code>.</p>
-<p><a href="https://github.com/cnzakii/h11r/blob/34ab19b4cc1283019b69b9fda8d496f77d35f85b/examples/python/websocket_upgrade.py">Read <code>websocket_upgrade.py</code> ↗</a></p>
+<p><a href="https://github.com/cnzakii/h11r/blob/9dc3062ec2493b71c207ace4e08d38996e14ff3e/examples/python/websocket_upgrade.py">Read <code>websocket_upgrade.py</code> ↗</a></p>
 <p>For exact method signatures and failure conditions, use the
 <a href="../api/">Python API reference</a>.</p>
 
