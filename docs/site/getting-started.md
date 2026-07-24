@@ -11,7 +11,7 @@ so you can see the protocol boundary first.
 
 ## Create a small project
 
-This tutorial needs [uv ↗](https://docs.astral.sh/uv/) and CPython 3.10–3.14.
+This tutorial needs [uv ↗](https://docs.astral.sh/uv/) and CPython 3.11–3.14.
 Create an empty project and install the released `h11r` package:
 
 ```console

@@ -99,7 +99,7 @@ jobs:
           - abi-profile: abi3
             python-version: "3.12"
             manylinux-interpreter: /opt/python/cp312-cp312/bin/python
-            wheel-tag: cp310-abi3
+            wheel-tag: cp311-abi3
           - abi-profile: cp314t
             python-version: "3.14t"
             manylinux-interpreter: /opt/python/cp314-cp314t/bin/python

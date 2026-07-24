@@ -198,7 +198,7 @@ async def handle_connection(
                     close=True,
                 )
                 break
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 # h11r deliberately has no timeout policy. This adapter chooses
                 # to send 408 when possible and then closes the slow connection.
                 await connection.send_response(

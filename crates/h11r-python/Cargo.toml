@@ -13,5 +13,8 @@ name = "_core"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.29.0", features = ["abi3-py310", "abi3t-py315"] }
+pyo3 = { version = "0.29.0", features = ["abi3-py311", "abi3t-py315"] }
 h11r = { path = "../h11r" }
+
+[build-dependencies]
+pyo3-build-config = "0.29.0"

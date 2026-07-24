@@ -89,6 +89,28 @@ def test_python_text_and_buffer_inputs_preserve_http_octets() -> None:
         invalid_pair.send_request("GET", "/", [["Host", "example.test"]])
 
 
+def test_receive_data_accepts_reused_receive_buffer() -> None:
+    # The socket.recv_into() pattern reads into one reused bytearray and hands
+    # the filled prefix over as a memoryview, without a bytes object per read.
+    request = b"GET / HTTP/1.1\r\nHost: example.test\r\n\r\n"
+    buffer = bytearray(16)
+    connection = h11r.Connection(h11r.Role.SERVER)
+    for start in range(0, len(request), len(buffer)):
+        chunk = request[start : start + len(buffer)]
+        buffer[: len(chunk)] = chunk
+        connection.receive_data(memoryview(buffer)[: len(chunk)])
+
+    request_event = connection.next_event()
+    assert isinstance(request_event, h11r.Request)
+    assert request_event.headers == ((b"Host", b"example.test"),)
+
+
+def test_buffer_inputs_must_be_contiguous() -> None:
+    connection = h11r.Connection(h11r.Role.SERVER)
+    with pytest.raises(ValueError, match="C-contiguous"):
+        connection.receive_data(memoryview(b"GET / HTTP/1.1\r\n\r\n")[::2])
+
+
 def test_direct_api_and_receive_events() -> None:
     connection = h11r.Connection(h11r.Role.SERVER)
     connection.receive_data(b"GET / HTTP/1.1\r\nHost: example.test\r\n\r\n")
