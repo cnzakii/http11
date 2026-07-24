@@ -267,6 +267,26 @@ def test_data_parts_use_non_buffer_nbytes_and_preserve_identity() -> None:
     assert suffix == b"\r\n"
 
 
+def test_data_parts_propagate_nbytes_lookup_errors_without_changing_state() -> None:
+    class UnavailableRegion:
+        @property
+        def nbytes(self) -> int:
+            raise RuntimeError("byte size unavailable")
+
+    connection = h11r.Connection(h11r.Role.CLIENT)
+    connection.send_request(
+        b"POST",
+        b"/",
+        [(b"Host", b"x"), (b"Content-Length", b"1")],
+    )
+
+    with pytest.raises(RuntimeError, match="byte size unavailable"):
+        connection.send_data_parts(UnavailableRegion())
+
+    assert connection.send_data_parts(b"x") == (b"", b"x", b"")
+    assert connection.end_of_message() == b""
+
+
 @pytest.mark.parametrize(
     ("body", "error_type"),
     [
