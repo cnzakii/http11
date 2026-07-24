@@ -119,7 +119,7 @@ Use the runnable examples when you need a specific integration:
 | --- | --- |
 | Process a body incrementally and validate trailers | [`streaming_body.py`][streaming-example] |
 | Preserve response order for pipelined requests | [`pipelining.py`][pipelining-example] |
-| Avoid copying a caller-owned body buffer inside `h11r` | [`zero_copy_body.py`][zero-copy-example] |
+| Pass a transport-owned file region through to `sendfile()` | [`zero_copy_body.py`][zero-copy-example] |
 | Hand a successful WebSocket Upgrade to `wsproto` | [`websocket_upgrade.py`][upgrade-example] |
 | Build a complete teaching server with `asyncio` streams | [`asyncio_server.py`][asyncio-example] |
 

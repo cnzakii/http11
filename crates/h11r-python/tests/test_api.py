@@ -232,18 +232,103 @@ def test_parser_accepted_line_endings_cross_the_python_boundary() -> None:
     assert response.headers == ((b"X-Test", b"one two"),)
 
 
-def test_data_parts_preserve_python_buffer_identity() -> None:
+def test_data_parts_preserve_python_buffer_identity_and_use_nbytes() -> None:
     connection = h11r.Connection(h11r.Role.CLIENT)
     connection.send_request(
         b"POST",
         b"/",
         [(b"Host", b"x"), (b"Transfer-Encoding", b"chunked")],
     )
-    body = memoryview(b"body")
+    body = memoryview(b"12345678").cast("B", shape=[2, 4])
     prefix, original, suffix = connection.send_data_parts(body)
-    assert prefix == b"4\r\n"
+    assert len(body) == 2
+    assert body.nbytes == 8
+    assert prefix == b"8\r\n"
     assert original is body
     assert suffix == b"\r\n"
+
+
+def test_data_parts_use_non_buffer_nbytes_and_preserve_identity() -> None:
+    class FileRegion:
+        @property
+        def nbytes(self) -> int:
+            return 12
+
+    connection = h11r.Connection(h11r.Role.CLIENT)
+    connection.send_request(
+        b"POST",
+        b"/",
+        [(b"Host", b"x"), (b"Transfer-Encoding", b"chunked")],
+    )
+    region = FileRegion()
+    prefix, original, suffix = connection.send_data_parts(region)
+    assert prefix == b"c\r\n"
+    assert original is region
+    assert suffix == b"\r\n"
+
+
+def test_data_parts_propagate_nbytes_lookup_errors_without_changing_state() -> None:
+    class UnavailableRegion:
+        @property
+        def nbytes(self) -> int:
+            raise RuntimeError("byte size unavailable")
+
+    connection = h11r.Connection(h11r.Role.CLIENT)
+    connection.send_request(
+        b"POST",
+        b"/",
+        [(b"Host", b"x"), (b"Content-Length", b"1")],
+    )
+
+    with pytest.raises(RuntimeError, match="byte size unavailable"):
+        connection.send_data_parts(UnavailableRegion())
+
+    assert connection.send_data_parts(b"x") == (b"", b"x", b"")
+    assert connection.end_of_message() == b""
+
+
+@pytest.mark.parametrize(
+    ("body", "error_type"),
+    [
+        pytest.param(object(), TypeError, id="missing"),
+        pytest.param("héllo", TypeError, id="text"),
+        pytest.param([b"aa", b"bb"], TypeError, id="list"),
+        pytest.param({"a": 1}, TypeError, id="dict"),
+        pytest.param(
+            type("NonIntegerByteSize", (), {"nbytes": 1.5})(),
+            TypeError,
+            id="non-integer",
+        ),
+        pytest.param(
+            type("NegativeByteSize", (), {"nbytes": -1})(),
+            OverflowError,
+            id="negative",
+        ),
+        pytest.param(
+            type("OverflowingByteSize", (), {"nbytes": 1 << 128})(),
+            OverflowError,
+            id="platform-overflow",
+        ),
+    ],
+)
+def test_data_parts_reject_invalid_byte_sizes_without_changing_state(
+    body: object, error_type: type[Exception]
+) -> None:
+    connection = h11r.Connection(h11r.Role.CLIENT)
+    connection.send_request(
+        b"POST",
+        b"/",
+        [(b"Host", b"x"), (b"Content-Length", b"1")],
+    )
+
+    with pytest.raises(error_type):
+        connection.send_data_parts(body)  # type: ignore[arg-type]
+
+    proxy = type("OneByteRegion", (), {"nbytes": 1})()
+    prefix, unchanged_proxy, suffix = connection.send_data_parts(proxy)
+    assert prefix == suffix == b""
+    assert unchanged_proxy is proxy
+    assert connection.end_of_message() == b""
 
 
 def test_limits_and_remote_error_status() -> None:
@@ -277,6 +362,7 @@ def test_events_have_value_equality_and_parts_require_contiguous_data() -> None:
         pass
     else:
         raise AssertionError("non-contiguous buffers cannot pass through")
+    assert client.send_data_parts(b"ok") == (b"2\r\n", b"ok", b"\r\n")
 
 
 def test_event_properties_reuse_their_immutable_python_values() -> None:

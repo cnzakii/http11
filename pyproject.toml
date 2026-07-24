@@ -59,7 +59,10 @@ select = [
 ]
 
 [tool.ty.src]
-include = ["crates/h11r-python/python"]
+include = ["crates/h11r-python/python", "examples/python"]
+
+[tool.ty.environment]
+root = ["crates/h11r-python/python"]
 
 # coverage.py measures the Python facade. cargo-llvm-cov measures Rust and the
 # PyO3 extension.

@@ -58,7 +58,7 @@ This lets h11r distinguish a clean close from a truncated HTTP message.
 | [`round_trip.py`](python/round_trip.py) | Request, `Data`, `EndOfMessage`, response, and keep-alive reuse over a synchronous byte stream |
 | [`streaming_body.py`](python/streaming_body.py) | Incremental body consumption, chunked framing, and trailers without collecting the full body |
 | [`pipelining.py`](python/pipelining.py) | Why buffered pipelined requests pause until the preceding response finishes |
-| [`zero_copy_body.py`](python/zero_copy_body.py) | `send_data_parts()` and preserving the caller's original body buffer |
+| [`zero_copy_body.py`](python/zero_copy_body.py) | Passing a file-region proxy through `send_data_parts()` to `socket.sendfile()` |
 | [`websocket_upgrade.py`](python/websocket_upgrade.py) | WebSocket handshake validation, HTTP 101, `trailing_data`, and wsproto ownership after handoff |
 | [`asyncio_server.py`](python/asyncio_server.py) | A real asynchronous server loop with back-pressure, timeouts, limits, errors, keep-alive, and shutdown |
 
@@ -71,9 +71,30 @@ Streaming controls how much application data must exist at once. The receiver
 in `streaming_body.py` updates a checksum for each `Data` event and waits until
 `EndOfMessage` to inspect trailers; it never builds one combined body.
 
-`send_data_parts()` solves a different problem. It lets h11r return framing
-around the original Python buffer instead of copying that body into a new
-`bytes` object. The socket and operating system may still copy the data.
+`send_data_parts()` solves a different problem. It determines framing from the
+body's byte length and returns the original object instead of copying it.
+Buffers use their full `nbytes`; other objects declare their exact byte length
+through an `nbytes` property. This lets a file-region proxy pass through unchanged so a
+transport can use `sendfile()`.
+
+Write the prefix, exactly the declared number of file bytes, and the suffix in
+order. If a partial send cannot be resumed, discard the connection because
+h11r has already accounted for those bytes. h11r does not inspect the file
+contents or take ownership of the file or its transmission. Actual kernel
+zero-copy depends on the transport and operating system.
+
+The byte-size contract differs deliberately from h11 0.16's passthrough API:
+
+```python
+# h11 0.16 interprets len(region) as a byte count.
+parts = connection.send_with_data_passthrough(h11.Data(data=region))
+
+# h11r requires region.nbytes to make the unit explicit.
+parts = connection.send_data_parts(region)
+```
+
+In either case, the transport processes the returned parts in order. h11r's
+wider send API remains intentionally distinct from h11's event-based API.
 
 Transport reads, HTTP chunks, and `Data` events do not have a one-to-one
 relationship. Applications must handle any number of `Data` events and use

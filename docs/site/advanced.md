@@ -1,5 +1,5 @@
 ---
-description: Use h11r for streaming bodies, buffer-preserving writes, pipelining, and protocol handoff.
+description: Use h11r for streaming bodies, passthrough writes, pipelining, and protocol handoff.
 ---
 
 # Advanced usage
@@ -12,7 +12,7 @@ has the matching need.
 | Need | h11r feature |
 | --- | --- |
 | Process a body without collecting it | `Data` events and incremental `send_data()` calls |
-| Avoid copying a large existing body buffer inside `h11r` | `send_data_parts()` |
+| Pass a transport-owned body object through `h11r` | `send_data_parts()` |
 | Accept queued requests without reordering responses | `PAUSED` and `start_next_cycle()` |
 | Continue with WebSocket, CONNECT, or another selected protocol | `trailing_data` |
 
@@ -45,32 +45,35 @@ Success ends with `streamed 36 bytes without collecting the body`.
 
 [Read `streaming_body.py` ↗](https://github.com/cnzakii/h11r/blob/{{ git.commit }}/examples/python/streaming_body.py)
 
-## Preserve an existing body buffer
+## Pass through a transport-owned body
 
 `send_data()` returns one convenient `bytes` object containing the body and any
-required framing. For a large, contiguous body that already exists in memory,
-`send_data_parts()` can keep that body object separate:
+required framing. `send_data_parts()` instead determines framing from the
+body's byte length and returns the original object separately:
 
 ```python
-prefix, original_body, suffix = connection.send_data_parts(body)
+region = FileRegion(file, offset=offset, nbytes=length)
+prefix, original_region, suffix = connection.send_data_parts(region)
 
 write_all(prefix)
-write_all(original_body)
+send_file_region(original_region)
 write_all(suffix)
 ```
 
-This avoids one body copy inside `h11r`, which can materially reduce the
-protocol-layer serialization cost for a large body. Keep `send_data()` as the
-simpler default for small bodies and measure the complete write path on the
-transport you actually use.
+Contiguous buffers use their full `nbytes`; other objects expose an integer
+`nbytes` property declaring the exact number of bytes they represent. This
+lets a transport-owned file-region proxy pass through unchanged for
+`socket.sendfile()` without giving `h11r` ownership of the file or its
+transmission. Keep `send_data()` as the simpler default for small bodies.
 
 [Inspect the 64 KiB body benchmark ↗](https://github.com/cnzakii/h11r/blob/{{ git.commit }}/crates/h11r/benches/h11r.rs)
 
-This is buffer preservation at the `h11r` boundary, not an end-to-end zero-copy
-guarantee. Keep `original_body` alive and unchanged until all writes complete,
-and preserve the returned order. Use this path only when the transport can
-write or batch separate buffers without first combining them.
-Here, `write_all()` is the complete-write operation supplied by your
+Write the prefix, exactly the declared number of body bytes, and the suffix in
+order. Resume any partial body write before sending the suffix; if that is
+impossible, discard the connection because `h11r` has already accounted for
+the declared bytes. Actual kernel zero-copy depends on the transport and
+operating system. Here, `write_all()` and `send_file_region()` are
+complete-write operations supplied by the
 [transport adapter](integration.md#write-to-the-transport).
 
 Run:

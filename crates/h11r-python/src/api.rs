@@ -3,7 +3,7 @@
 use h11r as core;
 use h11r::{Method, StatusCode};
 use pyo3::PyTypeInfo;
-use pyo3::exceptions::{PyException, PyTypeError, PyValueError};
+use pyo3::exceptions::{PyAttributeError, PyException, PyTypeError, PyValueError};
 use pyo3::prelude::*;
 use pyo3::types::{PyAny, PyBytes, PyMemoryView, PyModule, PyString, PyTuple};
 
@@ -623,26 +623,34 @@ impl PyConnection {
 
     /// Return `(prefix, original_object, suffix)` without copying body bytes.
     ///
-    /// Write the returned values in order without changing the body until all
-    /// three writes complete.
+    /// Contiguous buffers use their byte length. Other objects must expose
+    /// `nbytes` as the exact number of body bytes represented by the object.
+    ///
+    /// Write the prefix, exactly the determined number of body bytes, and the
+    /// suffix in order. After a partial body write, resume until the body and
+    /// suffix are complete or discard the connection.
     ///
     /// Args:
-    ///     data (bytes | bytearray | memoryview): Contiguous body buffer.
+    ///     data (object): A contiguous buffer or an object with an integer
+    ///         `nbytes` property.
     ///
     /// Returns:
-    ///     parts (tuple[bytes, bytes | bytearray | memoryview, bytes]): Framing
-    ///         prefix, the identical input object, and framing suffix.
+    ///     parts (tuple[bytes, object, bytes]): Framing prefix, the identical
+    ///         input object, and framing suffix.
     ///
     /// Raises:
-    ///     TypeError: If `data` does not implement the buffer protocol.
+    ///     TypeError: If `data` is neither a buffer nor byte-sized, or if
+    ///         `nbytes` is not an integer.
     ///     ValueError: If the buffer is not contiguous.
+    ///     OverflowError: If `nbytes` is negative or does not fit in the
+    ///         platform's address size.
     ///     LocalProtocolError: If body data is forbidden or violates framing.
     fn send_data_parts(
         &mut self,
         py: Python<'_>,
         data: Py<PyAny>,
     ) -> PyResult<(Py<PyBytes>, Py<PyAny>, Py<PyBytes>)> {
-        let length = contiguous_buffer_len(data.bind(py))?;
+        let length = body_nbytes(data.bind(py))?;
         let (prefix, suffix) = self.0.send_data_framing(length).map_err(local_error)?;
         Ok((
             PyBytes::new(py, &prefix).unbind(),
@@ -824,6 +832,22 @@ fn contiguous_buffer_len(value: &Bound<'_, PyAny>) -> PyResult<usize> {
         ));
     }
     view.getattr("nbytes")?.extract()
+}
+
+fn body_nbytes(value: &Bound<'_, PyAny>) -> PyResult<usize> {
+    match contiguous_buffer_len(value) {
+        Ok(length) => Ok(length),
+        Err(buffer_error) if buffer_error.is_instance_of::<PyTypeError>(value.py()) => {
+            match value.getattr("nbytes") {
+                Ok(length) => length.extract(),
+                Err(error) if error.is_instance_of::<PyAttributeError>(value.py()) => {
+                    Err(buffer_error)
+                }
+                Err(error) => Err(error),
+            }
+        }
+        Err(error) => Err(error),
+    }
 }
 
 fn text_or_buffer(_py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Vec<u8>> {

@@ -1,19 +1,43 @@
-"""Write an HTTP body without asking h11r to copy the body buffer.
+"""Write a file region without asking h11r to copy or inspect its contents.
 
 ``send_data()`` returns one convenient ``bytes`` object containing framing and
-body data. For a large body, ``send_data_parts()`` instead returns the framing
-around the original Python buffer so the transport can write the three pieces
-in order.
+body data. ``send_data_parts(proxy)`` instead reads the proxy's declared byte size
+and returns framing around the identical object so the transport can write the
+three pieces in order and use ``socket.sendfile()`` for the body.
 
-"Zero-copy" here describes the h11r boundary. Python's socket and the operating
-system may still copy data while moving it to the network.
+Actual kernel zero-copy depends on the transport and operating system. h11r is
+Sans-I/O: it never opens the file, owns its descriptor, or calls ``sendfile()``.
 """
 
 from __future__ import annotations
 
 import socket
+import tempfile
+from dataclasses import dataclass
+from typing import BinaryIO
 
 import h11r
+
+
+@dataclass(frozen=True)
+class FileRegion:
+    """A transport-owned file and the byte range to send from it."""
+
+    file: BinaryIO
+    offset: int
+    nbytes: int
+
+
+def send_file_region(transport: socket.socket, region: FileRegion) -> None:
+    """Send the whole region, accounting for partial transport writes."""
+    offset = region.offset
+    remaining = region.nbytes
+    while remaining:
+        sent = transport.sendfile(region.file, offset=offset, count=remaining)
+        if sent == 0:
+            raise ConnectionError("file ended before the declared region length")
+        offset += sent
+        remaining -= sent
 
 
 def next_event(connection: h11r.Connection, transport: socket.socket) -> object:
@@ -94,19 +118,29 @@ def main() -> None:
             )
         )
 
-        body = memoryview(bytearray(b"a body kept in its original Python buffer"))
-        prefix, unchanged_body, suffix = client.send_data_parts(body)
+        body = b"a body read directly from a transport-owned file region"
+        with tempfile.TemporaryFile() as body_file:
+            body_file.write(b"ignored prefix:" + body + b":ignored suffix")
+            body_file.flush()
+            region = FileRegion(
+                body_file, offset=len(b"ignored prefix:"), nbytes=len(body)
+            )
+            prefix, unchanged_region, suffix = client.send_data_parts(region)
 
-        # The returned middle object is the original buffer. Keep it alive and
-        # unmodified until all writes complete, and preserve this exact order.
-        client_socket.sendall(prefix)
-        client_socket.sendall(unchanged_body)
-        client_socket.sendall(suffix)
-        client_socket.sendall(client.end_of_message())
+            # The middle object is the identical proxy. Preserve this order and
+            # finish a partial file send before writing the suffix. If that is
+            # impossible, discard the connection because h11r already accounted
+            # for exactly region.nbytes body bytes.
+            assert unchanged_region is region
+            client_socket.sendall(prefix)
+            send_file_region(client_socket, unchanged_region)
+            client_socket.sendall(suffix)
+            client_socket.sendall(client.end_of_message())
 
-        received_body = receive_body(server, server_socket)
-        print(f"server received {len(received_body)} body bytes")
-        print(f"h11r added chunk framing {prefix!r} ... {suffix!r}")
+            received_body = receive_body(server, server_socket)
+            assert received_body == body
+            print(f"server received {len(received_body)} exact file-region bytes")
+            print(f"h11r added chunk framing {prefix!r} ... {suffix!r}")
 
         # Finish both sides of the HTTP exchange. Closing immediately after the
         # upload would leave the client unaware of whether the server accepted it.
