@@ -73,12 +73,7 @@ request_bytes = client.send_request(
 )
 request_bytes += client.end_of_message()
 
-client.receive_data(
-    b"HTTP/1.1 200 OK\r\n"
-    b"Content-Length: 17\r\n"
-    b"\r\n"
-    b"Hello from h11r!\n"
-)
+client.receive_data(b"HTTP/1.1 200 OK\r\nContent-Length: 17\r\n\r\nHello from h11r!\n")
 
 status_code = None
 response_body = bytearray()

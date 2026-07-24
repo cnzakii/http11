@@ -24,9 +24,11 @@ uv add h11r
 
 Create `first_client.py` with the complete program below:
 
+<!-- fmt:off -->
 ```python
 --8<-- "first_client.py"
 ```
+<!-- fmt:on -->
 
 Run the file:
 
